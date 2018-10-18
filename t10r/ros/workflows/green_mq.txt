@@ -1,0 +1,29 @@
+{
+  "machine_question": {
+    "edges": [
+      {
+        "source_id": 0,
+        "target_id": 1
+      },
+      {
+        "source_id": 1,
+        "target_id": 2
+      }
+    ],
+    "nodes": [
+      {
+        "curie": "MONDO:0005737",
+        "id": 0,
+        "type": "disease"
+      },
+      {
+        "id": 1,
+        "type": "gene"
+      },
+      {
+        "id": 2,
+        "type": "chemical_substance"
+      }
+    ]
+  }
+}

@@ -1,0 +1,30 @@
+doc: |
+  This module defines a reusable template.
+  It can be imported into other workflows via the import directive.
+
+templates:
+
+  bionames:
+    doc: |
+      This template extends the built in get operator.
+    code: get
+    args:
+      pattern: 'https://bionames.renci.org/lookup/{input}/{type}/'
+      rename:
+        - foreach: "$.[*]"
+          old: "label"
+          new: "name"
+    meta:
+      main:
+        input:
+          input:
+            doc: The name of the object to find identifiers for.
+            type: string
+            required: true
+          type:
+            doc: The intended biolink_model type of the resulting identifiers.
+            type: biolink_model
+            required: true
+        output:
+          doc: A Translator standard knowledge graph.
+          type: knowledge_graph_standard

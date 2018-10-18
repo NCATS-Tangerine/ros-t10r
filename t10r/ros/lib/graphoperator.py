@@ -135,7 +135,7 @@ class GraphOperator(Operator):
             e = e + a[1]
 
         """ Return knowledge graph standard. """
-        return event.context.graph_tools.kgs (nodes = n, edges = e)
+        return event.context.graph.tools.kgs (nodes = n, edges = e)
             
     def short_text(self, text, max_len=85):
         """ Generate a shortened form of text. """
@@ -168,11 +168,11 @@ class GraphOperator(Operator):
                 print (json.dumps(g, indent=2))
                 edges = edges + g['result_graph']['edge_list']
                 nodes = nodes + g['result_graph']['node_list']
-        #responses = event.context.graph_tools.kgs (nodes = nodes, edges = edges)
+        #responses = event.context.graph.tools.kgs (nodes = nodes, edges = edges)
         '''
         """ fancy, but broken. """
         """ Select nodes and edges from all results and aggregate. """
-        responses = event.context.graph_tools.kgs (
+        responses = event.context.graph.tools.kgs (
             nodes = event.context.json.select (
                 query = "$.[*].result_list.[*].[*].result_graph.node_list.[*]",
                 obj = responses),
