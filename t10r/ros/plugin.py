@@ -23,6 +23,7 @@ class Plugin:
         """ Classes implementing the Ros Operator interface. """
         return [
             "t10r.ros.lib.bionames.Bionames",
+            "t10r.ros.lib.biothings.Biothings",
             "t10r.ros.lib.xray.XRay",
             "t10r.ros.lib.gamma.Gamma",
             "t10r.ros.lib.icees.Icees",

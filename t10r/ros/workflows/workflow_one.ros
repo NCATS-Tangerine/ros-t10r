@@ -73,7 +73,7 @@ workflow:
          It may be possible to accomplish some of this in other ways, but for now, we provide Syfur
          Syfur is a restricted DSL that translates to a subset of Cypher. See examples below.
       When
-         This validation is triggered when 
+         This validation is only triggered for certain inputs.
     code: validate
     args:
       depends: $biothings_module_4_and_5
@@ -86,7 +86,7 @@ workflow:
           items: "match type=disease return id"
           all: [ "OMIM:600001", "MONDO:0005148", "DOID:9352" ]
         test_pioglitazone:
-          doc: Test attributes of a specific chemical. Ensure type 2 diabetes mellitus is present.
+          doc: Ensure a specific chemical is present and has expected attributes.
           items: "match type=chemical_substance id=CHEMBL.COMPOUND:CHEMBL595 return node_attributes"
           match:
             - .*Thiazolidinedione.*

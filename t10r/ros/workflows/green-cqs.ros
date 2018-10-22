@@ -1,7 +1,7 @@
 ros: 0.1
 info:
   version: 0.0.1
-  title: Ros Workflow One
+  title: Green Team Asthma CQs
   description: |
     A workflow orchestrating the construction and validation of a graphical knowledge network aimed at addressing these questions.
     CQ1. Among pediatric patients with an asthma-like phenotype, is exposure to particulate matter <=2.5 micrometers in diameter (PM2.5)
@@ -17,45 +17,31 @@ info:
 
 workflow:
 
-  disease_ids:
-    doc: Resolve an English disease name to ontology identifiers.
+  naming:
+    doc: Resolve names to ontology identifiers.
     code: bionames
     args:
-      type: disease
-      input: $disease_name
+      query:
+        - select $disease_name from disease as disease_ids
+        - select $drug_name from drug as drug_ids
+        - select "particulate matter" from chemical_substance as particulate_matter_ids
 
-  drug_ids:
-    doc: Resolve drug names to identifiers.
-    code: bionames
+  chemical_to_gene_to_disease:
+    doc: Build chemical-gene-disease associations.
+    code: requests
     args:
-      type: chemical_substance
-      input: $drug_name
-
-  particulate_matter_ids:
-    doc: Get particulate matter ids
-    code: bionames
-    args:
-      type: chemical_substance
-      input: particulate matter
-
-#  chemical_to_gene_to_disease:
-#    doc: Build a graph of chemical-gene-disease associations.
-#    code: requests
-#    args:
-#      depends:
-#        - $disease_ids
-#        - $drug_ids
-#        - $particulate_matter_ids
-#      url: http://robokop.renci.org:6011/api/now?max_results=250
-#      MaQ:
-#        - chemical_substance($drug_ids)->gene->disease($disease_ids)
-#        - chemical_substance($particulate_matter_ids)->gene->disease($disease_ids)
+      depends:
+        - $naming
+      url: http://robokop.renci.org:6011/api/now?max_results=250
+      MaQ:
+        - chemical_substance($drug_ids)->gene->disease($disease_ids)
+        - chemical_substance($particulate_matter_ids)->gene->disease($disease_ids)
 
   clinical_observations:
     doc: Augment graph with ICEES clinical data.
     code: icees
     args:
- #     depends: $chemical_to_gene_to_disease
+      depends: $chemical_to_gene_to_disease
       cohort:
         - AvgDailyPM2.5Exposure > 2
       associations_to_all_features:
@@ -68,7 +54,7 @@ workflow:
     args:
       elements:
         - clinical_observations
-#        - chemical_to_gene_to_disease
+        - chemical_to_gene_to_disease
         
         
 

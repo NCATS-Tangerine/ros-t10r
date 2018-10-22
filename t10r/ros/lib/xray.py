@@ -24,9 +24,7 @@ class XRay (Operator):
             for syn in syns:
                 for s in syn['xref']:
                     if s.startswith ("DOID"):
-                        print (f"-------> {s}")
                         doids[s] = s
-        print (f"diseases------------> {diseases}")
         disease_id = [ d for d in doids.keys() ][0]
         
         ''' Execute the module. '''

@@ -114,9 +114,11 @@ class GraphOperator(Operator):
         """ Invoke a generic graph operator, or set of these. """
         
         """ Look for select statements and execute them to populate the outbound question. """
-        """ This is limited to jsonpath_rw queries at the moment but is probably extensible to cypher. """
+        """ This is limited to jsonpath_rw queries at the moment. Maybe extend to cypher. """
         """ Also need to dig deeper into the object hierarchy when executing statements. """
         responses = []
+
+        '''
         loop = { k : self.resolve_query(v, event) for k, v in event.map.items () }
 
         """ Process messages replacing variables, executing queries. """
@@ -128,6 +130,12 @@ class GraphOperator(Operator):
         """ Call them all. Package edges and nodes. """
         """ Will likely need more careful packaging to fully support chaining. """
         aggregate = [ self.invoke_service (event, message) for message in messages ]
+        '''
+
+        message =  self.new_message (event.message)
+        message = self.resolve (message, event, loop=None, index=None)
+        aggregate = [ self.invoke_service (event, message) ]
+        
         n = []
         e = []
         for a in aggregate:

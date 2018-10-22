@@ -75,7 +75,7 @@ class Gamma(Operator):
         status_code = response.status_code
         
         if not status_code == 200:
-            logger.debug ("********** * * * GAMMA is broken. **********")
+            logger.debug ("********** * broken * **********")
             
         return response.json() if status_code == 200 else event.context.graph.tools.kgs (nodes=[])
 
