@@ -2,7 +2,7 @@ import requests
 import json
 import sys
 from ros.framework import Operator
-from t10r.ros.lib.gamma import Gamma
+from translator.ros.lib.gamma import Gamma
 
 class XRay (Operator):
     ''' Interact with the XRay reasoner. '''

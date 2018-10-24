@@ -4,7 +4,7 @@ import requests
 import re
 from time import sleep
 from ros.framework import Operator
-from t10r.ros.lib.bionames import Bionames
+from translator.ros.lib.bionames import Bionames
 
 requests.packages.urllib3.disable_warnings()
 
