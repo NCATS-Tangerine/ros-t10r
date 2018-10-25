@@ -98,7 +98,7 @@ class Icees(Operator):
                                     })
                                 nodes = nodes + ids
 
-        return event.context.graph.tools.kgs (
+        return event.context.tools.kgs (
             nodes = nodes,
             edges = edges)
                                     

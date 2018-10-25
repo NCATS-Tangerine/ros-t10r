@@ -77,7 +77,7 @@ class Gamma(Operator):
         if not status_code == 200:
             logger.debug ("********** * broken * **********")
             
-        return response.json() if status_code == 200 else event.context.graph.tools.kgs (nodes=[])
+        return response.json() if status_code == 200 else event.context.tools.kgs (nodes=[])
 
     def wf1_module3 (self, graph):
         pass #curl -X GET "http://robokop.renci.org/api/wf1mod3a/DOID:9352/?max_results=5" -H "accept: application/json"

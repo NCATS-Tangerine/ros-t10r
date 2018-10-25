@@ -125,5 +125,5 @@ class Biothings (Operator):
         """ Return the results to be merged into the result graph. """
         event.context.graph.update (drugs)
         
-        return event.context.graph.tools.kgs (nodes=drugs)
+        return event.context.tools.kgs (nodes=drugs)
 

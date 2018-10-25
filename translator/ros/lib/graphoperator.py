@@ -143,7 +143,7 @@ class GraphOperator(Operator):
             e = e + a[1]
 
         """ Return knowledge graph standard. """
-        return event.context.graph.tools.kgs (nodes = n, edges = e)
+        return event.context.tools.kgs (nodes = n, edges = e)
             
     def short_text(self, text, max_len=85):
         """ Generate a shortened form of text. """
