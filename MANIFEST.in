@@ -1,0 +1,7 @@
+include *.py
+include *.txt
+#include *.ros
+include translator/*
+#include translator/ros/*
+include translator/ros/lib/*.py
+include translator/ros/workflows/*.ros
