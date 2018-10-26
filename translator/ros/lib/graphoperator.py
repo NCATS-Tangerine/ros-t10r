@@ -46,30 +46,7 @@ class GraphOperator(Operator):
         }
         update (response, values)
         return response
-    '''
-    def resolve(self, d, event, loop, index):
-        result = d
-        if isinstance(d, list):
-            result = [ self.resolve(e, event, loop, index) for e in d ]
-        elif isinstance(d, dict):
-            for k, v in d.items():
-                if isinstance(v, collections.Mapping):
-                    result[k] = self.resolve(v, event, loop, index)
-                elif isinstance(v, str):
-                    if v.startswith('$'):
-                        key = v[1:]
-                        obj = loop[key][index] if key in loop and len(loop[key]) > index else None 
-                        if not obj:
-                            obj = event.context.resolve_arg (v)
-                        result[k] = obj
-                    if v.startswith('select '):
-                        result[k] = self.resolve_query (v, event)
-                elif isinstance(v, list):
-                    result[k] = self.resolve (v, event, loop, index)
-                else:
-                    result[k] = v
-        return result
-    '''
+    
     def resolve(self, d, event, loop, index):
         result = d
         if isinstance(d, list):
@@ -117,25 +94,9 @@ class GraphOperator(Operator):
         """ This is limited to jsonpath_rw queries at the moment. Maybe extend to cypher. """
         """ Also need to dig deeper into the object hierarchy when executing statements. """
         responses = []
-
-        '''
-        loop = { k : self.resolve_query(v, event) for k, v in event.map.items () }
-
-        """ Process messages replacing variables, executing queries. """
-        messages = []
-        for index in range(0, len(loop)):
-            archetype = self.new_message (event.message)
-            messages.append (self.resolve (archetype, event, loop, index))
-
-        """ Call them all. Package edges and nodes. """
-        """ Will likely need more careful packaging to fully support chaining. """
-        aggregate = [ self.invoke_service (event, message) for message in messages ]
-        '''
-
         message =  self.new_message (event.message)
         message = self.resolve (message, event, loop=None, index=None)
-        aggregate = [ self.invoke_service (event, message) ]
-        
+        aggregate = [ self.invoke_service (event, message) ]        
         n = []
         e = []
         for a in aggregate:
@@ -171,25 +132,15 @@ class GraphOperator(Operator):
         """ kludgy, but works. """
         edges = []
         nodes = []
+        print (f"{json.dumps (responses, indent=2)}")
         for r in responses:
-            for g in r['result_list']:
-                print (json.dumps(g, indent=2))
-                edges = edges + g['result_graph']['edge_list']
-                nodes = nodes + g['result_graph']['node_list']
-        #responses = event.context.graph.tools.kgs (nodes = nodes, edges = edges)
-        '''
-        """ fancy, but broken. """
-        """ Select nodes and edges from all results and aggregate. """
-        responses = event.context.graph.tools.kgs (
-            nodes = event.context.json.select (
-                query = "$.[*].result_list.[*].[*].result_graph.node_list.[*]",
-                obj = responses),
-            edges = event.context.json.select (
-                query = "$.[*].result_list.[*].[*].result_graph.edge_list.[*]",
-        obj = responses))
-        '''
+            if 'knowledge_graph' in r:
+                kg = r['knowledge_graph']
+                if 'result_list' in kg:
+                    for g in kg['result_list']:
+                        edges = edges + g['result_graph']['edge_list']
+                        nodes = nodes + g['result_graph']['node_list']
+                        print (f"....")
+                        
         t = self.short_text (json.dumps(responses, indent=2))
-        print (f"responses: {t}")        
-        #return responses
-
         return [ nodes, edges ]
